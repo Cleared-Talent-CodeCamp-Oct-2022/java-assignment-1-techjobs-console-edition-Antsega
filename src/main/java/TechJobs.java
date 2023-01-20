@@ -24,6 +24,7 @@ public class TechJobs {
         HashMap<String, String> actionChoices = new HashMap<>();
         actionChoices.put("search", "Search");
         actionChoices.put("list", "List");
+        int count = 0;
 
         System.out.println("Welcome to LaunchCode's TechJobs App!");
 
@@ -31,6 +32,7 @@ public class TechJobs {
         while (true) {
 
             String actionChoice = getUserSelection("View jobs by (type 'x' to quit):", actionChoices);
+            if (count > 1) System.out.print("\b");
 
             if (actionChoice == null) {
                 break;
@@ -63,7 +65,14 @@ public class TechJobs {
 
                 if (searchField.equals("all")) {
                     printJobs(JobData.findByValue(searchTerm));
-                } else {
+                }
+                // if the arraylist returned has a length of zero
+                // print no results
+                else if (JobData.findByColumnAndValue(searchField, searchTerm).size() == 0) {
+                    System.out.println("No Results");
+                    count += 1;
+                }
+                else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
             }
@@ -118,8 +127,15 @@ public class TechJobs {
     }
 
     // Print a list of jobs
-    private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
+    private static void printJobs(ArrayList<HashMap<String, String>> jobList) {
+        for (HashMap<String, String> jobs : jobList) {
+            System.out.println();
+            System.out.println("*****");
 
-        System.out.println("printJobs is not implemented yet");
+            for (String key: jobs.keySet()) {
+                System.out.println(key + ": " + jobs.get(key));
+            }
+            System.out.println("*****");
+        }
     }
 }
